@@ -450,13 +450,7 @@ var resizePizzas = function(size) {
 
   // Iterates through pizza elements on the page and changes their widths
   function changePizzaSizes(size) {
-    // for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
-    //   var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
-    //   var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
-    //   document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
-    // }
-
-    // Alex: move repeating variable newwidth out of the loop.
+    // Alex: move the repeating variable assignment out of the for loop.
     var randomPizzaContainer = document.querySelectorAll(".randomPizzaContainer"),
         newwidth = [],
         dx = determineDx(randomPizzaContainer[0], size),
@@ -513,24 +507,13 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
-  var items = document.querySelectorAll('.mover'),
-      left = [];
+  var items = document.querySelectorAll('.mover');
 
-  // Alex: write items all at once so the browser recalculates style only once
+  // Alex: move the repeating variable assignment out of the for loop.
   var num = document.body.scrollTop / 1250;
-  // for (var i = 0; i < items.length; i++) {
-  //   var phase = Math.sin(radian + (i % 5));
-  //   left = items[i].basicLeft + 100 * phase + 'px';
-  //   items[i].style.transform = 'translateX(' + left + ')';
-  // }
-
   for (var i = 0; i < items.length; i++) {
     var phase = Math.sin(num + (i % 5));
-    left[i] = items[i].basicLeft + 100 * phase + 'px';
-    // items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
-  }
-  for (var i = 0; i < items.length; i++) {
-    items[i].style.left = left[i];
+    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
@@ -551,10 +534,12 @@ document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
 
-  for (var i = 0; i < 200; i++) {
+  // Alex: reduce the amount of pizzas 
+  for (var i = 0; i < 32; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
-    elem.src = "images/pizza.png";
+    // Alex: resize the image to fit the actual width
+    elem.src = "images/pizza.min.png";
     elem.style.height = "100px";
     elem.style.width = "73.333px";
     elem.basicLeft = (i % cols) * s;

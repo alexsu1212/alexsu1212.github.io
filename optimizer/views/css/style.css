@@ -29,7 +29,7 @@ form {
   font-weight: 800;
 }
 
-/* Alex: use translate3d() to force hardware acceleration*/
+/* Alex: use translate3d() to force hardware acceleration */
 .mover {
   position: fixed;
   width: 256px;
