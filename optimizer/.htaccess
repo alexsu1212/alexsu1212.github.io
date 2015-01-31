@@ -1,0 +1,4 @@
+<FilesMatch "\.(jpg|jpeg|png|css|js)$">
+    Header set Cache-Control "max-age=86400, public"
+    Header set Expires "Tue, 20 Jan 2015 12:00:00 GMT"
+</FilesMatch>
