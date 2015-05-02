@@ -1,0 +1,50 @@
+html { height: 100%; }
+body { height: 100%; margin: 0; padding: 0 }
+#map_canvas { height: 100%;}
+
+#search-bar {
+	position: fixed;
+	top: 20px;
+	left: 10px;
+}
+
+#search-bar input, button{
+	height: 20px;
+}
+
+#place-list {
+	position: fixed;
+	top: 20px;
+	right: 10px;
+}
+
+ul {
+	list-style: none;
+	background-color: white;
+	opacity: 0.8;
+	padding: 20px;
+}
+
+li {
+	padding: 10px 0;
+	border-bottom: 1px #ccc solid;
+	cursor: pointer;
+}
+
+@media screen and (max-width: 640px) {
+	#place-list {
+		display: none;
+	}
+}
+
+h2, p{
+	margin: 5px 0;
+}
+
+.visits {
+	margin-left: 7px;
+}
+
+.warning {
+	color: red;
+}
