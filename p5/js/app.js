@@ -1,4 +1,4 @@
-// data of attractions
+// raw data of attractions in SF
 var initialPlaces = [
 	{
 		lat: 37.794809,
@@ -76,7 +76,7 @@ var initialPlaces = [
 	},
 ];
 
-// update all markers on the map
+// update the display of all markers on the map
 function setAllMap(map, places) {
 	for (var i = 0; i < places.length; i++) {
 		places[i].setMap(map);
@@ -96,12 +96,14 @@ function resetMarker() {
 function clickMarker(marker, index) {
 	if(marker !== vm.lastPlace) {
 		resetMarker();
-
+		
 		vm.lastPlace = marker;
+		// update the display of the marker being clicked and related list item
 		marker.infowindow.open(vm.map, marker);
 		marker.setAnimation(google.maps.Animation.BOUNCE);
 		$('li').eq(index).css('background', '#ccc');
 
+		// get Foursquare data asynchronously and display it in the infowindow
 		$.getJSON(marker.api, function(data) {
 			$('div#fs').html('<img src="img/Foursquare-icon.png">'+
 				'<span class="visits">Visits: '+data.response.venue.stats.visitsCount+'</span>'+
@@ -120,10 +122,12 @@ function clickList(list) {
 		resetMarker();
 
 		vm.lastPlace = marker;
+		// update the display of the list item being clicked and related marker
 		marker.infowindow.open(vm.map, marker);
 		marker.setAnimation(google.maps.Animation.BOUNCE);
 		list.css('background', '#ccc');
 
+		// get Foursquare data asynchronously and display it in the infowindow
 		$.getJSON(marker.api, function(data) {
 			$('div#fs').html('<img src="img/Foursquare-icon.png">'+
 				'<span class="visits">Visits: '+data.response.venue.stats.visitsCount+'</span>'+
@@ -144,12 +148,13 @@ var ViewModel = function() {
 		zoom: 13,
 		mapTypeId: google.maps.MapTypeId.ROADMAP
 	};
+	// initialize the map
 	this.map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+	
+	this.keyword = ko.observable('');	// search keyword
 
-	this.keyword = ko.observable('');
-
-	this.places = ko.observableArray([]);
-	this.oriPlaces = this.places();  // original attractions
+	this.places = ko.observableArray([]);	// attractions displayed on the screen
+	this.oriPlaces = this.places();  // all attractions
 	this.lastPlace = null;  // used to keep track of the place last clicked
 
 	// create marker objects from raw data and set events
@@ -164,9 +169,11 @@ var ViewModel = function() {
 		});
 		self.places.push(marker);
 
+		// listen to the event when the marker gets clicked
 		google.maps.event.addListener(marker, 'click', function() {
 			clickMarker(marker, marker.index);
 		});
+		// listen to the event when the infowindow gets closed
 		google.maps.event.addListener(marker.infowindow, 'closeclick', function() {
 			marker.setAnimation(null);
 			$('li').eq(self.lastPlace.index).css('background', 'white');
@@ -177,17 +184,20 @@ var ViewModel = function() {
 	this.filter = ko.computed(function() {
 		var results = [];
 
+		// deactivate the active marker and list item 
 		if(self.lastPlace !== null) {
 			self.lastPlace.infowindow.close();
 			self.lastPlace.setAnimation(null);
 			$('li').eq(vm.lastPlace.index).css('background', 'white');
 			self.lastPlace = null;
 		}
+		// set attractions displayed on the screen to original data
 		self.places(self.oriPlaces);
 		self.places().forEach(function(place, index) {
 			place.index = index;
 		});
 
+		// if search keyword is not empty, match the markers and list items with the keyword and update on the screen.
 		if(self.keyword() !== undefined && self.keyword() !== '') {
 			var index = 0;
 			for(var i = 0; i < self.places().length; i++) {
@@ -200,10 +210,12 @@ var ViewModel = function() {
 			self.places(results);
 			setAllMap(null, self.oriPlaces);
 			setAllMap(self.map, self.places());
+		// if search keyword is empty, reset markers and list items back to original.
 		} else if(self.keyword() === '') {
 			self.places(self.oriPlaces);
 			setAllMap(self.map, self.places());
 		}
+		// listen to the event when list items get clicked
 		$('li').on('click', function() {
 			clickList($(this));
 		});
@@ -214,6 +226,7 @@ var vm = new ViewModel();
 
 ko.applyBindings(vm);
 
+// listen to the event when list items get clicked
 $('li').on('click', function() {
 	clickList($(this));
 });

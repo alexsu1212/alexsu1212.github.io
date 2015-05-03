@@ -13,6 +13,7 @@ body { height: 100%; margin: 0; padding: 0 }
 }
 
 #place-list {
+	max-width: 300px;
 	position: fixed;
 	top: 20px;
 	right: 10px;
@@ -31,9 +32,16 @@ li {
 	cursor: pointer;
 }
 
+/* when screen is smaller than 640px, move the list to the left. */
 @media screen and (max-width: 640px) {
 	#place-list {
-		display: none;
+		top: 35px;
+		left: 10px;
+	}
+	ul {
+		max-height: 150px;
+		overflow: auto;
+		display: inline-block;
 	}
 }
 
