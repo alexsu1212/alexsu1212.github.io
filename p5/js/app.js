@@ -26,7 +26,7 @@ var initialPlaces = [
 		lat: 37.801863,
 		lng: -122.419146,
 		title: "Washington Square Park",
-		description: '<h2>Lombard Street</h2>'+
+		description: '<h2>Washington Square Park</h2>'+
 			'<p>San Francisco, CA 94133</p>'+
 			'<p>United States</p>'+
 			'<div id="fs"></div>',
