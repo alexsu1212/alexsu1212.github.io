@@ -61,12 +61,7 @@ $(function() {
          * hiding/showing of the menu element.
          */
         it('is hidden by default', function() {
-            var width = $('.menu').width(),
-                padding = parseInt($('.menu').css('padding').replace('px', ''));
-                translateX = parseInt($('.menu').css('transform').split(',')[4]);
-            // the distance of the menu moving to the left has to be larger than 
-            // the total width of the menu so it's hiden completely.
-            expect(width + padding*2 + translateX).not.toBeGreaterThan(0);
+            expect($('body').hasClass('menu-hidden')).toBe(true);
         });
 
          /* TODO: Write a test that ensures the menu changes
@@ -98,9 +93,9 @@ $(function() {
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
          beforeEach(function(done) {
-            setTimeout(function() {
+            loadFeed(0, function() {
                 done();
-            }, 2000);
+            });
          });
 
          it('should have at least a single .entry element', function(done) {
